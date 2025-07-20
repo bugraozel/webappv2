@@ -1,0 +1,1534 @@
+/* Starlight Crush - Mobil Öncelikli Responsive Tasarım */
+
+/* CSS custom properties for better mobile support */
+:root {
+    --vh: 1vh;
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+}
+
+/* Prevent zoom on input focus in iOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    select:focus,
+    textarea:focus,
+    input:focus {
+        font-size: 16px !important;
+    }
+}
+
+/* Prevent horizontal scroll */
+html {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #ffffff;
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    -webkit-font-feature-settings: "liga", "kern";
+    font-feature-settings: "liga", "kern";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+    min-height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    padding: var(--safe-area-inset-top, 8px) var(--safe-area-inset-right, 8px) var(--safe-area-inset-bottom, 8px) var(--safe-area-inset-left, 8px);
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Yükleme ekranı */
+.loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 20px;
+    color: white;
+    text-align: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.game-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.star-icon {
+    font-size: 4em;
+    animation: starGlow 2s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+}
+
+@keyframes starGlow {
+    0% { 
+        transform: scale(1);
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+    }
+    100% { 
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1));
+    }
+}
+
+.game-logo h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ffd700, #ffed4a, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.loader {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-top: 6px solid #ffd700;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Ana oyun container - mobil optimize */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    height: -webkit-fill-available;
+    padding: 10px;
+    padding: var(--safe-area-inset-top, 10px) var(--safe-area-inset-right, 10px) var(--safe-area-inset-bottom, 10px) var(--safe-area-inset-left, 10px);
+    position: relative;
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+/* Header - kompakt ve şık */
+.header {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.level-info, .score-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.95em;
+}
+
+.coins {
+    color: #ffd700;
+    font-size: 1.1em;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    animation: coinGlow 3s ease-in-out infinite;
+}
+
+@keyframes coinGlow {
+    0%, 100% { 
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        transform: scale(1);
+    }
+    50% { 
+        text-shadow: 0 0 20px rgba(255, 215, 0, 1);
+        transform: scale(1.05);
+    }
+}
+
+/* Hedef section */
+.target-section {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    padding: 15px 20px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.target-info {
+    text-align: center;
+    margin-bottom: 12px;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.progress-container {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    height: 12px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ffd700, #ffed4a, #fff);
+    border-radius: 12px;
+    width: 0%;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    position: relative;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Oyun tahtası - touch optimize */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 15px;
+    flex: 1;
+    max-height: 400px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 
+        inset 0 4px 15px rgba(0, 0, 0, 0.4),
+        0 8px 25px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    
+    /* Touch optimizasyonu */
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Puzzle parçaları - gerçek yap-boz */
+.puzzle-piece {
+    aspect-ratio: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 3px rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    
+    /* Touch responsiveness */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: none;
+    -webkit-touch-callout: none;
+}
+
+.puzzle-piece.clickable:hover {
+    transform: scale(1.02);
+    border-color: #ffd700;
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.puzzle-piece.clickable:active {
+    transform: scale(0.98);
+}
+
+.puzzle-piece.empty-slot {
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    cursor: default;
+}
+
+.puzzle-piece.empty-slot:hover {
+    transform: none;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: none;
+}
+
+.candy {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #fff, #f8f8f8);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid transparent;
+    box-shadow: 
+        0 6px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 3px rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    
+    /* Touch responsiveness */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    
+    /* Emoji font support */
+    font-family: -apple-system, BlinkMacSystemFont, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-feature-settings: "liga", "kern";
+    font-feature-settings: "liga", "kern";
+    text-rendering: optimizeLegibility;
+}
+
+.candy::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 15px;
+}
+
+.candy:active {
+    transform: scale(0.95);
+}
+
+.candy:hover::before,
+.candy.dragging::before {
+    opacity: 1;
+}
+
+.candy.selected {
+    border-color: #ffd700;
+    transform: scale(1.08);
+    box-shadow: 
+        0 0 25px rgba(255, 215, 0, 0.8),
+        0 6px 15px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.candy.target-highlight {
+    border-color: #00ff88;
+    transform: scale(1.05);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.8),
+        0 6px 15px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 255, 200, 0.1)) !important;
+}
+
+.candy.dragging {
+    z-index: 100;
+    transform: scale(1.15) rotate(3deg);
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.4),
+        0 0 25px rgba(255, 215, 0, 0.6);
+}
+
+.candy.matched {
+    animation: matchPop 0.6s ease-out forwards;
+}
+
+@keyframes matchPop {
+    0% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+    30% { 
+        transform: scale(1.4); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: scale(0); 
+        opacity: 0; 
+    }
+}
+
+/* Yıldız türleri - Starlight teması */
+.candy-0 { 
+    background: linear-gradient(135deg, #ffd700, #ffed4a); 
+    color: #333;
+} /* Altın yıldız */
+
+.candy-1 { 
+    background: linear-gradient(135deg, #ff6b9d, #c44569); 
+    color: #fff;
+} /* Pembe yıldız */
+
+.candy-2 { 
+    background: linear-gradient(135deg, #4facfe, #00f2fe); 
+    color: #fff;
+} /* Mavi yıldız */
+
+.candy-3 { 
+    background: linear-gradient(135deg, #43e97b, #38f9d7); 
+    color: #333;
+} /* Yeşil yıldız */
+
+.candy-4 { 
+    background: linear-gradient(135deg, #fa709a, #fee140); 
+    color: #333;
+} /* Gökkuşağı yıldız */
+
+.candy-5 { 
+    background: linear-gradient(135deg, #a8edea, #fed6e3); 
+    color: #333;
+} /* Pastel yıldız */
+
+/* Alt menü */
+.bottom-menu {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 0 5px;
+}
+
+.menu-btn {
+    flex: 1;
+    padding: 15px 8px;
+    border: none;
+    border-radius: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.9em;
+    color: white;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-height: 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-btn:active::before {
+    opacity: 1;
+}
+
+.withdraw-btn {
+    background: linear-gradient(135deg, #f093fb, #f5576c) !important;
+    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4) !important;
+}
+
+.wallet-btn {
+    background: linear-gradient(135deg, #4facfe, #00f2fe) !important;
+    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4) !important;
+}
+
+.menu-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Wallet info */
+.wallet-info {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    padding: 10px 15px;
+    color: white;
+    font-size: 0.85em;
+    word-break: break-all;
+    margin-top: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Karakter mini gösterimi - dragable floating character */
+.character-mini {
+    position: fixed;
+    top: var(--safe-area-inset-top, 20px);
+    right: var(--safe-area-inset-right, 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+    cursor: grab;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50px;
+    padding: 8px;
+    backdrop-filter: blur(10px);
+    width: 76px;
+    height: 76px;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.character-mini:active {
+    cursor: grabbing;
+    transform: scale(1.1);
+}
+
+.character-mini:hover {
+    background: rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.guardian-avatar {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.character-image {
+    width: 100%;
+    margin-bottom: 10px;
+    animation: floatAnimation 3s ease-in-out infinite;
+}
+
+@keyframes floatAnimation {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.guardian-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    animation: guardianFloat 3s ease-in-out infinite;
+}
+
+.guardian-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: guardianFloat 3s ease-in-out infinite;
+}
+
+@keyframes guardianFloat {
+    0%, 100% { 
+        transform: translateY(0px);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    }
+    50% { 
+        transform: translateY(-8px);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+    }
+}
+
+.character-level {
+    font-size: 0.7em;
+    background: linear-gradient(135deg, #ffd700, #ffed4a);
+    color: #333;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+    white-space: nowrap;
+}
+
+.character-info {
+    text-align: center;
+    font-size: 0.7em;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.character-info h3 {
+    margin-bottom: 3px;
+    font-size: 1em;
+}
+
+.character-info p {
+    margin-bottom: 5px;
+    opacity: 0.9;
+}
+
+.level-badge {
+    background: linear-gradient(135deg, #ffd700, #ffed4a);
+    color: #333;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 0.8em;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+/* Modals - iyileştirilmiş */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 350px;
+    width: 100%;
+    color: white;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    pointer-events: none;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 1.6em;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Stats */
+.completion-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+    font-weight: bold;
+}
+
+.stat-value {
+    font-size: 1.2em;
+    color: #ffd700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Forms */
+.withdraw-info {
+    margin: 20px 0;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.withdraw-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.withdraw-form input {
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1em;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.withdraw-form input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.withdraw-note {
+    background: rgba(255, 215, 0, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Action buttons */
+.action-btn {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1em;
+    margin: 8px;
+    min-height: 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-btn.primary {
+    background: linear-gradient(135deg, #ffd700, #ffed4a);
+    color: #333;
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+.action-btn.secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.action-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Rules modal */
+.rules-content {
+    text-align: left;
+}
+
+.rules-content h3 {
+    color: #ffd700;
+    margin: 20px 0 15px 0;
+    font-size: 1.2em;
+}
+
+.rules-content ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.rules-content li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+/* Score animation */
+.score-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #ffd700, #ffed4a);
+    color: #333;
+    padding: 15px 25px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+    z-index: 9999;
+    animation: scoreFloat 2.5s ease-out forwards;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Success animation for puzzle completion */
+.success-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    color: #333;
+    padding: 20px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    z-index: 10000;
+    animation: successFloat 3s ease-out forwards;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.success-icon {
+    font-size: 3em;
+    margin-bottom: 10px;
+    animation: bounce 0.6s ease-in-out infinite;
+}
+
+.success-text {
+    font-size: 1.5em;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.reward-text {
+    font-size: 1.2em;
+    color: #ffd700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+@keyframes successFloat {
+    0% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(0.5); 
+    }
+    20% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1.1); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: translate(-50%, -100%) scale(1); 
+    }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Time warning */
+.time-warning {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.3em;
+    z-index: 10000;
+    animation: warningPulse 2s ease-out forwards;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+
+@keyframes warningPulse {
+    0% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(0.5); 
+    }
+    20% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1.1); 
+    }
+    80% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(1); 
+    }
+}
+
+@keyframes scoreFloat {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -80%) scale(1);
+    }
+}
+
+/* Responsive - Mobil öncelikli */
+/* Çok küçük ekranlar (320px ve altı) */
+@media screen and (max-width: 320px) {
+    .game-container {
+        padding: 5px;
+        gap: 8px;
+    }
+    
+    .game-board {
+        max-width: 280px;
+        padding: 8px;
+        gap: 2px;
+    }
+    
+    .candy {
+        font-size: 1.1em;
+        border-radius: 12px;
+    }
+    
+    .header {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+    
+    .menu-btn {
+        font-size: 0.7em;
+        padding: 8px 4px;
+        min-height: 40px;
+    }
+    
+    .character-mini {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .character-level {
+        font-size: 0.6em;
+    }
+}
+
+/* Küçük ekranlar (321px - 380px) */
+@media screen and (min-width: 321px) and (max-width: 380px) {
+    .game-container {
+        padding: 6px;
+        gap: 10px;
+    }
+    
+    .game-board {
+        max-width: 320px;
+        padding: 10px;
+        gap: 3px;
+    }
+    
+    .candy {
+        font-size: 1.3em;
+        border-radius: 15px;
+    }
+    
+    .header {
+        padding: 10px 15px;
+        font-size: 0.85em;
+    }
+    
+    .menu-btn {
+        font-size: 0.8em;
+        padding: 10px 6px;
+        min-height: 45px;
+    }
+    
+    .character-mini {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Orta boy mobil ekranlar (381px - 480px) */
+@media screen and (min-width: 381px) and (max-width: 480px) {
+    .game-container {
+        padding: 8px;
+        gap: 12px;
+    }
+    
+    .game-board {
+        max-width: 350px;
+        padding: 12px;
+        gap: 4px;
+    }
+    
+    .candy {
+        font-size: 1.5em;
+        border-radius: 18px;
+    }
+    
+    .character-mini {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+/* Büyük mobil/küçük tablet (481px - 768px) */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .game-board {
+        max-width: 400px;
+        padding: 15px;
+        gap: 5px;
+    }
+    
+    .candy {
+        font-size: 1.7em;
+    }
+    
+    .character-mini {
+        width: 80px;
+        height: 80px;
+        right: 15px;
+    }
+}
+
+/* Tablet ve desktop (769px+) */
+@media screen and (min-width: 769px) {
+    .game-container {
+        max-width: 450px;
+        margin: 0 auto;
+        padding: 15px;
+    }
+    
+    .game-board {
+        max-width: 420px;
+        padding: 20px;
+        gap: 6px;
+    }
+    
+    .candy {
+        font-size: 1.8em;
+    }
+    
+    .character-mini {
+        width: 90px;
+        height: 90px;
+        right: 20px;
+    }
+}
+
+/* iOS Safari viewport fix */
+@supports (-webkit-touch-callout: none) {
+    .game-container {
+        height: -webkit-fill-available;
+    }
+    
+    #app {
+        min-height: -webkit-fill-available;
+    }
+    
+    body {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Android Chrome viewport fix */
+@media screen and (max-height: 600px) {
+    .game-container {
+        gap: 8px;
+    }
+    
+    .game-board {
+        max-height: 300px;
+    }
+}
+
+/* Landscape mode optimizations */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .game-container {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .game-board {
+        max-height: none;
+        max-width: 300px;
+        flex: 0 0 auto;
+    }
+    
+    .header {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        width: 120px;
+        height: auto;
+        flex: 0 0 auto;
+    }
+    
+    .bottom-menu {
+        flex-direction: column;
+        width: 80px;
+        height: auto;
+        flex: 0 0 auto;
+    }
+    
+    .menu-btn {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        width: 100%;
+        height: 60px;
+    }
+}
+
+/* Touch/Drag Animasyonları */
+.candy.selected {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px var(--star-glow);
+    border: 2px solid #ffd700;
+    z-index: 10;
+    animation: pulse 0.8s infinite;
+}
+
+.candy.target-highlight {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #00ff88;
+    border: 2px solid #00ff88;
+    background: linear-gradient(45deg, rgba(0, 255, 136, 0.2), rgba(255, 215, 0, 0.2));
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 15px var(--star-glow); }
+    50% { box-shadow: 0 0 25px var(--star-glow), 0 0 35px var(--star-glow); }
+    100% { box-shadow: 0 0 15px var(--star-glow); }
+}
+
+/* Skor Animasyonu */
+.score-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: scoreFloat 2.5s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes scoreFloat {
+    0% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% { 
+        opacity: 1; 
+        transform: translate(-50%, -80px) scale(1.2);
+    }
+    100% { 
+        opacity: 0; 
+        transform: translate(-50%, -120px) scale(0.8);
+    }
+}
+
+/* Puzzle area styles */
+.puzzle-area {
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.puzzle-area h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #ffffff;
+    font-size: 1em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.puzzle-pieces {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.puzzle-piece.draggable {
+    transition: all 0.3s ease;
+}
+
+.puzzle-piece.draggable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.puzzle-piece.draggable:active {
+    transform: scale(0.95);
+}
+
+.puzzle-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70px;
+    border: 2px dashed #555;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.puzzle-slot:hover {
+    border-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.puzzle-slot.filled {
+    border: 2px solid #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+/* Drag feedback */
+.puzzle-piece[draggable="true"]:hover {
+    cursor: grab;
+}
+
+.puzzle-piece[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+    .puzzle-pieces {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3px;
+        padding: 8px;
+    }
+    
+    .puzzle-piece.draggable {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .puzzle-slot {
+        min-height: 60px;
+    }
+    
+    .puzzle-area {
+        margin: 10px 0;
+        padding: 10px;
+    }
+}
+
+/* Puzzle Pieces Container */
+.puzzle-pieces {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    max-width: 350px;
+    margin: 0 auto;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Draggable Puzzle Pieces */
+.puzzle-piece.draggable {
+    cursor: grab;
+    transition: all 0.2s ease;
+    transform-origin: center;
+}
+
+.puzzle-piece.draggable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.puzzle-piece.draggable:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+/* Puzzle Slots */
+.puzzle-slot {
+    position: relative;
+    overflow: hidden;
+}
+
+.puzzle-slot:empty:hover {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Remove button styling */
+.puzzle-slot .remove-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.puzzle-slot .remove-btn:hover {
+    background: rgba(255, 0, 0, 1);
+    transform: scale(1.1);
+}
+
+/* Success Animation */
+.success-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    z-index: 3000;
+    animation: successPop 3s ease-out forwards;
+    max-width: 300px;
+}
+
+.success-animation .success-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+    animation: bounce 1s infinite;
+}
+
+.success-animation .success-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.success-animation .reward-text {
+    font-size: 1.5em;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+@keyframes successPop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    40% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Time Warning */
+.time-warning {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 152, 0, 0.95);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1.1em;
+    z-index: 2500;
+    animation: warningPulse 2s ease-out forwards;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes warningPulse {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8);
+    }
+    20% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.1);
+    }
+    40% {
+        transform: translateX(-50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.9);
+    }
+}
+
+/* Sliding Puzzle Styles */
+.sliding-puzzle {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 3px !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.puzzle-tile {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    margin: 0;
+    position: relative;
+    min-height: 100px;
+    max-height: 100px;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-size: 300px 300px !important;
+    background-repeat: no-repeat !important;
+}
+
+.puzzle-tile:not(.empty-tile) {
+    border: 3px solid #fff !important;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.puzzle-tile:not(.empty-tile):hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 215, 0, 0.8) !important;
+}
+
+.puzzle-tile:not(.empty-tile):active {
+    transform: scale(0.95);
+}
+
+.puzzle-tile.empty-tile {
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 2px dashed rgba(255, 255, 255, 0.3) !important;
+    cursor: default;
+}
+
+/* Mobile optimizations for sliding puzzle */
+@media (max-width: 480px) {
+    .sliding-puzzle {
+        max-width: 300px !important;
+        padding: 15px;
+        gap: 2px !important;
+    }
+    
+    .puzzle-tile {
+        min-height: 95px;
+        max-height: 95px;
+    }
+    
+    .puzzle-tile:not(.empty-tile):hover {
+        transform: none; /* Mobilde hover efekti yok */
+    }
+    
+    .puzzle-tile:not(.empty-tile):active {
+        transform: scale(0.98);
+    }
+}
