@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#302b63">
+    <title>✨ Starlight Puzzle - Yap-Boz Oyunu</title>
+    
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="starlight-styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Yükleme ekranı -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="game-logo">
+                <div class="star-icon">🧩</div>
+                <h1>Starlight Puzzle</h1>
+            </div>
+            <div class="loader"></div>
+            <p>🧩 3x3 Prenses Puzzle yükleniyor...</p>
+            <p style="font-size: 0.8em; margin-top: 10px;">60 saniyede doğru sıraya diz!</p>
+        </div>
+
+        <!-- Ana oyun ekranı -->
+        <div id="game-container" class="game-container hidden">
+            <!-- Üst bilgi çubuğu -->
+            <div class="header">
+                <div class="level-info">
+                    <span id="level-display">Seviye 1</span>
+                    <div class="coins">💰 <span id="coins-display">0</span></div>
+                </div>
+                <div class="score-info">
+                    <span id="score-display">Skor: 0</span>
+                    <div>🎯 <span id="moves-display">30</span></div>
+                </div>
+            </div>
+
+            <!-- Hedef gösterge -->
+            <div class="target-section">
+                <div class="target-info">
+                    ⏰ Süre: <span id="target-score">60</span> saniye
+                </div>
+                <div class="progress-container">
+                    <div id="progress-bar" class="progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- Oyun tahtası ve çözüm alanı -->
+            <div class="puzzle-container">
+                <!-- Oyun tahtası -->
+                <div class="game-board-wrapper">
+                    <h4 class="board-title">🧩 Oyna</h4>
+                    <div id="game-board" class="game-board sliding-puzzle">
+                        <!-- Sliding puzzle tahtası - JavaScript ile oluşturulacak -->
+                    </div>
+                </div>
+                
+                <!-- Çözüm göstergesi -->
+                <div class="solution-wrapper">
+                    <h4 class="board-title">🎯 Hedef</h4>
+                    <div id="solution-board" class="game-board solution-board">
+                        <!-- Çözülmüş hali - JavaScript ile oluşturulacak -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sliding puzzle için parça alanına ihtiyaç yok -->
+            <div id="puzzle-pieces-container" style="display: none; margin-top: 20px;">
+                <h4 style="text-align: center; color: #fff; margin-bottom: 10px;">🧩 Parçalar</h4>
+                <div id="puzzle-pieces" class="puzzle-pieces">
+                    <!-- Parçalar JavaScript ile oluşturulacak -->
+                </div>
+            </div>
+
+            <!-- Sliding puzzle için parça alanına ihtiyaç yok -->
+            <div class="puzzle-area" style="display: none;">
+                <h3>🧩 Puzzle Parçaları (Sürükle ve Bırak)</h3>
+                <div id="puzzle-pieces" class="puzzle-pieces">
+                    <!-- Parçalar JavaScript ile oluşturulacak -->
+                </div>
+            </div>
+
+            <!-- Alt menü -->
+            <div class="bottom-menu">
+                <button id="daily-bonus-btn" class="menu-btn">
+                    🎁 Günlük Bonus
+                </button>
+                <button id="withdraw-btn" class="menu-btn withdraw-btn">
+                    💸 Para Çek
+                </button>
+                <button id="wallet-btn" class="menu-btn wallet-btn">
+                    👛 Cüzdan
+                </button>
+            </div>
+
+            <!-- Cüzdan bilgisi -->
+            <div id="wallet-info" class="wallet-info hidden">
+                <div>📱 TronLink: <span id="wallet-status">Bağlı değil</span></div>
+                <div id="wallet-address" style="font-size: 0.7em; margin-top: 2px;"></div>
+            </div>
+
+            <!-- Starlight Guardian - Header'da göster -->
+            <div class="character-mini">
+                <div class="guardian-avatar">
+                    <img src="starlight-guardian.png" alt="Guardian" class="guardian-image" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="guardian-placeholder" style="display: none;">🌟</div>
+                </div>
+                <div class="character-level">
+                    Lv.<span id="char-level-mini">1</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Günlük bonus modalı -->
+        <div id="daily-bonus-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>🎁 Günlük Bonus</h2>
+                <p>Her gün giriş yaparak bonus coin kazanın!</p>
+                
+                <div class="completion-stats">
+                    <div class="stat">
+                        <span class="stat-label">Bonus:</span>
+                        <span class="stat-value">+50 💰</span>
+                    </div>
+                </div>
+
+                <button id="claim-bonus-btn" class="action-btn primary">
+                    🎁 Bonusu Al
+                </button>
+                <button id="close-bonus-modal" class="action-btn secondary">
+                    ❌ Kapat
+                </button>
+            </div>
+        </div>
+
+        <!-- Para çekme modalı -->
+        <div id="withdraw-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>💸 Para Çekme</h2>
+                
+                <div class="withdraw-info">
+                    <p><strong>Mevcut Bakiye:</strong> <span id="current-balance">0</span> TL</p>
+                    <p><strong>Minimum Çekim:</strong> 1,000 TL</p>
+                    <p><strong>Her puzzle:</strong> 200 TL kazanırsınız</p>
+                </div>
+
+                <div class="withdraw-form">
+                    <input type="number" id="withdraw-amount" placeholder="Çekim miktarı (TL)" min="1000" step="100">
+                    <input type="text" id="tron-address" placeholder="TRON (TRC20) cüzdan adresi">
+                </div>
+
+                <div class="withdraw-note">
+                    ⚠️ <strong>Önemli:</strong> TRON adresi yanlışsa paranızı kaybedebilirsiniz!
+                </div>
+
+                <button id="submit-withdraw-btn" class="action-btn primary">
+                    💸 Çekim Talebi Ver
+                </button>
+                <button id="close-withdraw-modal" class="action-btn secondary">
+                    ❌ Kapat
+                </button>
+            </div>
+        </div>
+
+        <!-- Cüzdan bağlama modalı -->
+        <div id="wallet-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>👛 TronLink Cüzdan</h2>
+                
+                <p>TRON (TRC20) coinlerinizi çekmek için TronLink cüzdanınızı bağlayın.</p>
+
+                <button id="connect-wallet-btn" class="action-btn primary">
+                    🔗 TronLink'e Bağlan
+                </button>
+                <button id="close-wallet-modal" class="action-btn secondary">
+                    ❌ Kapat
+                </button>
+            </div>
+        </div>
+
+        <!-- Oyun kuralları modalı -->
+        <div id="rules-modal" class="modal hidden">
+            <div class="modal-content rules-content">
+                <h2>📋 Oyun Kuralları</h2>
+                
+                <h3>🧩 Nasıl Oynanır</h3>
+                <ul>
+                    <li>3x3 yap-boz parçalarını doğru yere yerleştirin</li>
+                    <li>Parçalara tıklayarak boş alana hareket ettirin</li>
+                    <li>60 saniye içinde puzzle'ı tamamlamaya çalışın</li>
+                </ul>
+
+                <h3>💰 Para Kazanma</h3>
+                <ul>
+                    <li>Puzzle'ı 60 saniyede tamamlayın = 200 TL</li>
+                    <li>Her başarılı puzzle 200 TL kazandırır</li>
+                    <li>Süre dolarsa hiçbir şey kazanamazsınız</li>
+                </ul>
+
+                <h3>💸 Para Çekme</h3>
+                <ul>
+                    <li>Minimum 1,000 TL biriktirin</li>
+                    <li>TronLink cüzdanınıza çekim yapın</li>
+                    <li>Çekim talepleri 24 saat içinde işlenir</li>
+                </ul>
+
+                <button id="close-rules-modal" class="action-btn primary">
+                    ✅ Anladım
+                </button>
+            </div>
+        </div>
+
+        <!-- Oyun tamamlama modalı -->
+        <div id="completion-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>🎉 Seviye Tamamlandı!</h2>
+                <p>Tebrikler! Bir sonraki seviyeye geçtiniz.</p>
+                
+                <div class="completion-stats">
+                    <div class="stat">
+                        <span class="stat-label">Skor:</span>
+                        <span id="final-score" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Kazanılan Coin:</span>
+                        <span id="earned-coins" class="stat-value">0 💰</span>
+                    </div>
+                </div>
+
+                <button id="next-level-btn" class="action-btn primary">
+                    ⏭️ Sonraki Seviye
+                </button>
+                <button id="play-again-btn" class="action-btn secondary">
+                    🔄 Tekrar Oyna
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="game.js"></script>
+</body>
+</html>
